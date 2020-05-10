@@ -1,8 +1,0 @@
-++++++++++++++++++++++
-Learning Objective 4
-++++++++++++++++++++++
-1. Enumerate all domains in the moneycorp.local.forest:
-2. Map the trusts of the dollarcorp.moneycorp.local domain:
-3. Map External trusts in moneycorp.local.forest:
-4. Identify external trusts of dollarcorp domain. Can you enumerate trusts for a trusting forest?
-
