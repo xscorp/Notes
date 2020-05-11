@@ -1,12 +1,14 @@
-* Finding current domain's forest, DC, children, domain mode, DomainModeLevel , Parent etc, we can use the following method of the .NET class:
+Finding current domain's forest, DC, children, domain mode, DomainModeLevel , Parent etc, we can use the following method of the .NET class:
+
 Class : "System.DirectoryServices.ActiveDirectory.Domain"
 Method: "GetCurrentDomain()"
 
 There are two ways to invoke methods from the class in powershell.
-1. $myclass = [System.DirectoryServices.ActiveDirectory.Domain]
-   $myclass::GetCurrentDomain()
 
-2. <pre>[System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain() </pre>
+* $myclass = [System.DirectoryServices.ActiveDirectory.Domain]
+  $myclass::GetCurrentDomain()
+  
+* <pre>[System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain() </pre>
 
 Powerview version:
 The same output can be achieved by using the "Get-NetDomain" method from "PowerView.ps1" module
