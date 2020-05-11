@@ -8,7 +8,7 @@ There are two ways to invoke methods from the class in powershell.
 * ```$myclass = [System.DirectoryServices.ActiveDirectory.Domain]```   
   ```$myclass::GetCurrentDomain()```
   
-* <pre>[System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain() </pre>
+* ```[System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()```
 
 Powerview version:
 The same output can be achieved by using the "Get-NetDomain" method from "PowerView.ps1" module
