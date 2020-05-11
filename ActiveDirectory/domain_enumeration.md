@@ -21,7 +21,7 @@ But, as instructed in the course, sometimes loading just the "dll" doesnt work a
 > Import-Module .\ActiveDirectory\ActiveDirectory.psd1
 > Get-ADDomain
 
-======================================================================================
+---------------------------------------------------------------------------------------
 When we have enough permissions to do so, we can list information from another domain by using the necessary flags with functions:
 Powerview version:
 > Get-NetDomain -Domain <domain>
@@ -30,7 +30,8 @@ eg: Get-NetDomain -Domain moneycorp.local
 ADModule version:
 > Get-ADDomain -Identity moneycorp.local
 
-=======================================================================================
+
+---------------------------------------------------------------------------------------
 
 To get the unique identifier "SID" of a domain(which can be seen in the Get-ADDomain, we can view that in powerview using:
 Powerview:
@@ -41,8 +42,8 @@ ADModule:
 or
 > (Get-ADDomain).DomainSID
 
-=======================================================================================
 
+---------------------------------------------------------------------------------------
 To list Domain Policy:
 Powerview:
 > Get-DomainPolicy
@@ -52,8 +53,8 @@ example:
 > (Get-DomainPolicy)."system access" 
 > (Get-DomainPolicy)."Kerberos Policy"
 
-=========================================================================================
 
+---------------------------------------------------------------------------------------
 For Domain controller enumeration:
 Powerview:
 > Get-NetDomainController
@@ -62,8 +63,8 @@ ADModule:
 > Get-ADDomainController
 
 
-==========================================================================================
 
+---------------------------------------------------------------------------------------
 For getting a list of users in current domain:
 Powerview:
 > Get-NetUser
@@ -88,8 +89,8 @@ For further user enumeration, we can use:
 and 
 > get-userproperty <property_name>
 
-=======================================================================================
 
+---------------------------------------------------------------------------------------
 To check certain fields in the user enum data:
 For example, to search for the term "built" in "Description" field of user data, we can use:
 
@@ -97,7 +98,8 @@ Powerup:
 > Find-UserField -SearchField Description -SearchTerm "built"
 
 
-========================================================================================
+
+---------------------------------------------------------------------------------------
 
 To list all computers in the current domain:
 Powerview:
@@ -108,7 +110,8 @@ or
 ADModule:
 > Get-ADComputer -Filter *
 
-========================================================================================
+
+---------------------------------------------------------------------------------------
 
 To list all domain groups in current domain:
 Powerview:
@@ -142,13 +145,15 @@ Powerview:
 ADModule:
 > Get-ADPrincipalGroupMembership -Identity <username>
 
-=================================================================================
+
+---------------------------------------------------------------------------------------
 
 To get a list of localgroups in a host, we can use:
 Powerview:
 > Get-NetLocalGroup -ComputerName <hostname> -ListGroups
 
-=================================================================================
+
+---------------------------------------------------------------------------------------
 
 
 To find all shares in current domain:
@@ -159,7 +164,8 @@ But this will print some unnecessary and "generally unaccessible" shares like "P
 To exclude them:
 > Invoke-ShareFinder -verbose -ExcludeStandard -ExcludePrint -ExcludeIPC
 
-=================================================================================
+
+---------------------------------------------------------------------------------------
 
 To find out all the Group Policy objects set by DC:
 Powerview:
@@ -172,13 +178,15 @@ Powerview:
 or use the following command:
 > gpresult /R
 
-================================================================================
+
+---------------------------------------------------------------------------------------
 
 To find Restricted Group GPO:
 Powerview:
 > Get-NetGPOGroup
 
-================================================================================
+
+---------------------------------------------------------------------------------------
 
 To find users that are in a local group of a machine using GPO:
 > Find-GPOComputerAdmin -Computer <hostname> 
@@ -186,7 +194,8 @@ To find users that are in a local group of a machine using GPO:
 To find computers where the given user is a member of a specific group:
 > Find-GPOLocation -Username <username> -Verbose
 
-===============================================================================
+
+---------------------------------------------------------------------------------------
 
 To find out all the Organisational Units (OU) inside a domain:
 > Get-NetOU 
@@ -195,7 +204,8 @@ To find out all the Organisational Units (OU) inside a domain:
 To find which GPO is applied to a particular OU:
 > Get NetGPO -GPOName <gplink_id>
 
-================================================================================
+
+---------------------------------------------------------------------------------------
 
 To get ACLs associated with specific object:
 Powerview:
@@ -204,14 +214,16 @@ Powerview:
 The "-ResolveGUIDs" creates a list of GUID rights and then automatically selects the needed one. 
 Due to this, the commands takes a bit time to return output.
 
-================================================================================
+
+---------------------------------------------------------------------------------------
 
 To search for interesting ACEs:
 > Invoke-ACLScanner -ResolveGUIDs
 
 Interesting ACEs are the ACE entries that might be useful for an attacker like interesting places with interesting access rights for a user
 
-================================================================================
+
+---------------------------------------------------------------------------------------
 
 For mapping domain trusts:
 Powerview:
@@ -221,13 +233,15 @@ ADModule:
 > Get-ADTrust -Identity <domain_name>
 Note: In ADModule's command, "-Identity" shouldn't be used for current domain. It doesn't work.
 
-================================================================================
+
+---------------------------------------------------------------------------------------
 
 For mapping forest trusts:
 Powerview:
 >Get-NetForestTrust -Forest <forestname>
 
-================================================================================
+
+---------------------------------------------------------------------------------------
 
 For mapping trusts within a forest:
 Powerview:
@@ -236,7 +250,8 @@ Powerview:
 ADModule:
 > Get-ADForest -Identity <forestname>
 
-================================================================================
+
+---------------------------------------------------------------------------------------
 
 For listing all domains in a forest:
 Powerview:
@@ -245,7 +260,8 @@ Powerview:
 ADModule:
 > (Get-ADForest).Domains
 
-=================================================================================
+
+---------------------------------------------------------------------------------------
 
 
 
@@ -257,7 +273,8 @@ We were only contacting DC for asking stuff.
 But now, we will do "User hunting" which is noisy and requires more interaction than just contacting DC.
 
 
-==================================================================================
+
+---------------------------------------------------------------------------------------
 
 To find all the machines in a domain where the current user has local admin access:
 > Find-LocalAdminAccess -Domain <domain_name>
@@ -266,7 +283,8 @@ The above command works by asking for a list of computers from DC using Get-NetC
 and then issues "Invoke-CheckLocalAdminAccess" command for each host,
 which returns whether or not our user has local admin access there.
 
-==================================================================================
+
+---------------------------------------------------------------------------------------
 
 To find local admins on all the machines in a domain:
 > Invoke-EnumerateLocalAdmin
@@ -274,12 +292,14 @@ To find local admins on all the machines in a domain:
 The above command works by getting a list of computers from DC using Get-NetComputer,
 and then querying "Get-NetLocalGroup" on each host to identify Admin groups and users.
 
-==================================================================================
+
+---------------------------------------------------------------------------------------
 
 To get session details of a computer:
 > Get-NetSession -ComputerName <computername>
 
-==================================================================================
+
+---------------------------------------------------------------------------------------
 
 To find all computers with a "Domain Admin" session:
 > Invoke-UserHunter
@@ -305,5 +325,5 @@ Due to this, the Invok-UserHunter becomes incapable of getting session details f
 To revert the permission change made using NetCease:
 > .\NetCease.ps1 -Revert
 
-===================================================================================
 
+---------------------------------------------------------------------------------------
