@@ -1,4 +1,4 @@
-## Hunting for CSRF
+# Hunting for CSRF
 
 Since CSRF is usually found in forms, **enumerate all forms** in a website.
 
