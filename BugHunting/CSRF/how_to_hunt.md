@@ -29,11 +29,11 @@ Some websites are too lazy to handle CSRF tokens. So, instead of generating a ra
   ```<meta name="referrer" content="no-referrer">```
 
   2. Many times, referer validation is done by checking if the "Referer" header value (contains/starts with/ends with) a particular string(URL):
-Let's say the expected "Referer" header is "http://example.com/user_details", attacker can try things like:
-If check is being performed for (contains/starts with) "example.com":
-"Referer: http://example.com.attacker.com/"
+     Let's say the expected "Referer" header is "http://example.com/user_details", attacker can try things like:
+      If check is being performed for (contains/starts with) "example.com":
+        "Referer: http://example.com.attacker.com/"
 
-If check is being performed for (contains/ends with) "example.com"
-"Referer: http://attacker.com/example.com
+      If check is being performed for (contains/ends with) "example.com"
+        "Referer: http://attacker.com/example.com
 
 * Check all the cookies present in the browser for that website. Sometimes, the CSRF token is not tied to a session cookie, but to another non-session cookie. In that case, attacker can find a way(or find a bug) to introduce his own cookie and then use his own CSRF token in the POC. The session will be handled by session cookie, while the CSRF validation will be handled by the CSRF token and non-session cookie which we have control over.
