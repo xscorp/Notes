@@ -1,3 +1,5 @@
+## Hunting for CSRF
+
 Since CSRF is usually found in forms, **enumerate all forms** in a website.
 
 An important note: Always be aware about how "normal behaviour" looks like. That means, to check whether or not a POC/technique worked, you must **be aware how the "successful" response and "failure" response looks like**.
