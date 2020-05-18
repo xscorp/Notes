@@ -1,2 +1,2 @@
 ## CSRF
-[Hunting for CSRF](/CSRF/how_to_hunt)
+[Hunting for CSRF](/Notes/BugHunting/CSRF/how_to_hunt)
