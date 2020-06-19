@@ -49,6 +49,7 @@ Note: This, by default sets the secret key/password as "mimikatz". But the above
 As soon as the DC restarts, the skeleton key is removed.
 
 
+
 ++++++++++++++++++++++++++++++++++++++
 DSRM(Directory Service Restore Mode):
 ++++++++++++++++++++++++++++++++++++++
