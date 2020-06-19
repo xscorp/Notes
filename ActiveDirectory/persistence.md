@@ -28,6 +28,8 @@ Example: Invoke-Mimikatz -Command '"lsadump::dcsync /user:dcorp\krbtgt"'
 +++++++++++++++
 Silver Ticket:
 +++++++++++++++
+
+
 Golden ticket creates a TGT using krbtgt's hash, but Silver ticket attack creates a TGS using the hash of the service to be approached.
 
 > Invoke-Mimikatz -Command '"kerberos::golden /domain:<domain_name> /sid:<sid> /target:<target_host_where_service_is_being_used> /service:<service_name> /rc4:<password_hash_for_machine_account> /user:<username> /ptt"'
@@ -36,6 +38,8 @@ Golden ticket creates a TGT using krbtgt's hash, but Silver ticket attack create
 +++++++++++++++
 Skeleton Key:
 +++++++++++++++
+
+
 Using skeleton key malware(attack/technique), the script modifies the LSASS(which handles the security and auth stuff in AD) gets modified and a secret key/password is made valid for every account other than their original password.
 That secret key can be used to access any account.
 
@@ -48,6 +52,8 @@ As soon as the DC restarts, the skeleton key is removed.
 ++++++++++++++++++++++++++++++++++++++
 DSRM(Directory Service Restore Mode):
 ++++++++++++++++++++++++++++++++++++++
+
+
 When a computer is promoted to Domain Controller, a DSRM password is set which is the local admin password of that computer.
 It can be extracted using:
 
