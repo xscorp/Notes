@@ -53,3 +53,29 @@
 
 ```docker container prune -f```
 
+
+* Create docker container("run" command pulls, creates and runs the command supplied), while "create" just does a part of the process. It pulls and creates the docker but does not run it:
+
+```docker create <image_name>```
+
+
+* Start a created container:
+
+```docker start <container_id>```
+
+
+* See the changes done on the image(compare core image to the changes done in the container):
+
+```docker container diff <container_id>```
+
+  This command will show output using codes like:
+	C: Created
+	A: Added
+	D: Deleted
+
+
+* Copy files from host system to docker:
+
+```docker container cp <file_path_in_host> <container_id>:<file_path_in_container>```
+
+
