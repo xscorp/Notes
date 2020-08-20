@@ -60,3 +60,34 @@ Broken Access Control is bad implementation of access control functionality that
 
 * Many applications detect if you are trying to access any restricted resource and redirects you to either login page or some other page. Often that redirection logic is flawed and that 302 response reveals the data of requested resource. So, if a redirection is happening whenever a restricted resource is being checked, always intercept that request and see the response in repeater. There is a possibility that we might be able to see the response of requested resource inside that 302 response.
 
+* Often, sensitive functionalities are implemented in multi-steps like:
+
+  Step 1: Fill the form and click on submit.  
+  Step 2: Ask for confirmation to submit.  
+  Step 3: Perform the operation.  
+  
+  If this multi-step functionality is not implemented perfectly, attackers can skip one of these steps.
+  
+  For example, in a portswigger lab, to change permission of a user, you need to go through following three steps:
+  
+  Step 1: Log in as Administraor(to be able to change permissions).
+  Step 2: Set the permission in /admin
+  Step 3: Confirm the permission change in /admin-roles/
+  
+  Ideally, a user should only be able to reach step three when 1 and 2 are completed. Sometimes, developers implement this security check in some of the steps but miss the rest thinking users won't be able to access some specific resource without previos ones.
+  
+  So in this, first 2 steps were implmented nicely but not the third one:
+  
+  ```GET /admin HTTP/1.1``` => Access Denied
+  
+  ```GET /admin-roles HTTP/1.1``` => Unauthorized
+  
+  ```
+  POST /admin-roles HTTP/1.1
+  ...
+  action=upgrade&confirmed=true&username=wiener
+  ```
+  
+  And it worked! So the reason was first two steps in the multi-step functionality was implemented nicely but not the last one. So the takeaway is, If you ever encounter a multi-step functionality, always check if you able to miss any step and move to higher one.
+  
+  
