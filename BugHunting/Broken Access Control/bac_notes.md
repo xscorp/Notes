@@ -70,9 +70,9 @@ Broken Access Control is bad implementation of access control functionality that
   
   For example, in a portswigger lab, to change permission of a user, you need to go through following three steps:
   
-  Step 1: Log in as Administraor(to be able to change permissions).
-  Step 2: Set the permission in /admin
-  Step 3: Confirm the permission change in /admin-roles/
+  Step 1: Log in as Administraor(to be able to change permissions).  
+  Step 2: Set the permission in /admin  
+  Step 3: Confirm the permission change in /admin-roles/  
   
   Ideally, a user should only be able to reach step three when 1 and 2 are completed. Sometimes, developers implement this security check in some of the steps but miss the rest thinking users won't be able to access some specific resource without previos ones.
   
