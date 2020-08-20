@@ -58,3 +58,5 @@ Broken Access Control is bad implementation of access control functionality that
 
 * Sometimes, applications don't use simple UIDs like 0,1,2, instead, they use GUIDs which are unpredictible like "a3dds-4dsf4-dsf4-43sd". In that case, attacker needs to find out GUIDs of other users. It might be exposed in other parts of the application like Comment section and authors section in a website.
 
+* Many applications detect if you are trying to access any restricted resource and redirects you to either login page or some other page. Often that redirection logic is flawed and that 302 response reveals the data of requested resource. So, if a redirection is happening whenever a restricted resource is being checked, always intercept that request and see the response in repeater. There is a possibility that we might be able to see the response of requested resource inside that 302 response.
+
