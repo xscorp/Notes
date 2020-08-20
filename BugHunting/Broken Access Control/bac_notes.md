@@ -20,21 +20,21 @@ Broken Access Control is bad implementation of access control functionality that
 
   ```{"email":"new_email@gmail.com", "isAdmin":"true"}``` or ```{"email":"new_email@gmail.coM", "role_id":0}```
   
-  * Sometimes, users/groups are restricted from accessing a sensitive resource using URL-filtering. Something like:
+* Sometimes, users/groups are restricted from accessing a sensitive resource using URL-filtering. Something like:
   
-    ```DENY /admin/deleteUser, managers``` => This filtering rule will check if the URL requested by any user with the role ```managers``` is ```/admin/deleteUser``` and if it matches, it will restrict access to that resource.
+  ```DENY /admin/deleteUser, managers``` => This filtering rule will check if the URL requested by any user with the role ```managers``` is ```/admin/deleteUser``` and if it matches, it will restrict access to that resource.
     
-    In such cases, attacker can make use of non-standard headers ```X-Original-URL``` or ```X-Rewrite-URL``` which lets a user modify the original resource URL. Attacker can access that restricted resource using:
+  In such cases, attacker can make use of non-standard headers ```X-Original-URL``` or ```X-Rewrite-URL``` which lets a user modify the original resource URL. Attacker can access that restricted resource using:
     
-    ```GET / HTTP/1.1
+  ```GET / HTTP/1.1
     X-Original-URL: /admin/deleteUser
-    ```
+  ```
     
-    or
+  or
     
-    ```GET / HTTP/1.1
-    X-Rewrite-URL: /admin/deleteUser
-    ```
+  ```GET / HTTP/1.1
+  X-Rewrite-URL: /admin/deleteUser
+  ```
     
-    But please note that these headers are non-standard and are only allowed in some frameworks. Rest don't support it.
+  But please note that these headers are non-standard and are only allowed in some frameworks. Rest don't support it.
 
