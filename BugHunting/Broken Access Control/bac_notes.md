@@ -2,7 +2,7 @@
 Broken Access Control is bad implementation of access control functionality that lets a user to perform activities that aren't intended or that they shouldn't be able to do.
 
 ## Resources:
-[Portswigger - Broken Access Control](https://portswigger.net/web-security/access-control)
+[Portswigger - Broken Access Control](https://portswigger.net/web-security/access-control)  
 [Owasp Web Security Testing Guide -Bypassing Authorization Schema](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/05-Authorization_Testing/02-Testing_for_Bypassing_Authorization_Schema)
 
 ## How to test?
