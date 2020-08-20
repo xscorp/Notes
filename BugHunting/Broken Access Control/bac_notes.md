@@ -26,13 +26,15 @@ Broken Access Control is bad implementation of access control functionality that
     
   In such cases, attacker can make use of non-standard headers ```X-Original-URL``` or ```X-Rewrite-URL``` which lets a user modify the original resource URL. Attacker can access that restricted resource using:
     
-  ```GET / HTTP/1.1
-    X-Original-URL: /admin/deleteUser
+  ```
+  GET / HTTP/1.1
+  X-Original-URL: /admin/deleteUser
   ```
     
   or
     
-  ```GET / HTTP/1.1
+  ```
+  GET / HTTP/1.1
   X-Rewrite-URL: /admin/deleteUser
   ```
     
