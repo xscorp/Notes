@@ -56,3 +56,5 @@ Broken Access Control is bad implementation of access control functionality that
   
 * If any kind of role/user_id related data is present in URL or is being sent as POST data, try manipulating it and see if you can access data of other users. This is called **Horizontal Privilege Escalation** as we access data of another user who has **same privilege** as ours.
 
+* Sometimes, applications don't use simple UIDs like 0,1,2, instead, they use GUIDs which are unpredictible like "a3dds-4dsf4-dsf4-43sd". In that case, attacker needs to find out GUIDs of other users. It might be exposed in other parts of the application like Comment section and authors section in a website.
+
