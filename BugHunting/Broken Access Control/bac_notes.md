@@ -51,7 +51,7 @@ Broken Access Control is bad implementation of access control functionality that
   to
   
   ```
-  GET /changePassword?new_password=hello
+  GET /changePassword?new_password=hello HTTP/1.1
   ```
   
   
