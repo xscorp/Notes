@@ -12,11 +12,11 @@ Broken Access Control is bad implementation of access control functionality that
 
 * Sometimes, JSON data is being passed in a request. There are chances that there is a presence of certain parameters that manage authorization. Check for them.
 
-For example, In one lab exercise of portswigger academy, on invoking the email-change functionality, it was sending the following JSON data in the request:
+  For example, In one lab exercise of portswigger academy, on invoking the email-change functionality, it was sending the following JSON data in the request:
 
-```{"email":"new_email@gmail.com"}```
+  ```{"email":"new_email@gmail.com"}```
 
-Attacker can try injecting variables like:
+  Attacker can try injecting variables like:
 
-```{"email":"new_email@gmail.com", "isAdmin":"true"}``` or ```{"email":"new_email@gmail.coM", "role_id":0}```
+  ```{"email":"new_email@gmail.com", "isAdmin":"true"}``` or ```{"email":"new_email@gmail.coM", "role_id":0}```
 
