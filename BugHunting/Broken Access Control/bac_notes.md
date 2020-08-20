@@ -90,4 +90,8 @@ Broken Access Control is bad implementation of access control functionality that
   
   And it worked! So the reason was first two steps in the multi-step functionality was implemented nicely but not the last one. So the takeaway is, If you ever encounter a multi-step functionality, always check if you able to miss any step and move to higher one.
   
+* Sometimes, proper access control is implemented upto a specific point and beyon that, basic things like Referer header is used for access control to resources. For example, In many applications, proper access control is implemented until the user logs in as administrator inside /admin. Once the user is inside /admin, after that, to see if user can access /admin/DeleteUser or /admin/ChangePassword, only Referer header is checked(If Referer contains /admin, then resource access is allowed, otherwise not).
+
+  Since an attacker can easily manipulate Referer header, this restriction can be easily bypassed and sensitive functions can be accessed. Thereforce, always check beyone the main administrator dashboard endpoint whether or not other functions inside it can be accessed by just manipulating Referer header.
+  
   
