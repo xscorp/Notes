@@ -40,3 +40,18 @@ Broken Access Control is bad implementation of access control functionality that
     
   But please note that these headers are non-standard and are only allowed in some frameworks. Rest don't support it.
 
+* Sometimes, access control is only implemented to specific methods. For an example, if querying using POST method to /changePassword is restricted, attacker can try changing request method to bypass access control.
+
+  ```
+  POST /changePassword HTTP/1.1
+  ...
+  new_password=hello
+  ```
+  
+  to
+  
+  ```
+  GET /changePassword?new_password=hello
+  ```
+  
+  
