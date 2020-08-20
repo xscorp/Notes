@@ -54,4 +54,5 @@ Broken Access Control is bad implementation of access control functionality that
   GET /changePassword?new_password=hello HTTP/1.1
   ```
   
-  
+* If any kind of role/user_id related data is present in URL or is being sent as POST data, try manipulating it and see if you can access data of other users. This is called **Horizontal Privilege Escalation** as we access data of another user who has **same privilege** as ours.
+
