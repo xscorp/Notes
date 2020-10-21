@@ -12,14 +12,18 @@ apt-get update
 #============================#
 echo "[#] Installing necessary utils"
 #============================#
-echo "[*] Enabling 'main' package"
+echo "[*] Enabling 'main' and 'universal' repository"
 sudo add-apt-repository main
+sudo add-apt-repository universe
 
 echo "[*] Installing unzip"
 apt install unzip
 
 echo "[*] Installing golang-go"
 apt install golang-go
+
+echo "[*] Installing python3-pip"
+apt install python3-pip
 
 #============================#
 echo "[+] Installing apktool"
@@ -58,10 +62,18 @@ unzip /tmp/amass.zip -d /tmp/amass
 mv /tmp/amass/amass*/amass /usr/local/bin
 chmod +x /usr/local/bin/amass
 
-
 #============================#
 echo "[+] Installing httprobe"
 #============================#
 go get -u github.com/tomnomnom/httprobe
 mv ~/go/bin/httprobe /usr/local/bin
 rm -rf ~/go
+
+
+#============================#
+echo "[+] Installing Sublist3r"
+#============================#
+git clone https://github.com/aboul3la/Sublist3r.git /usr/share/Sublist3r
+pip3 install -r /usr/share/Sublist3r/requirements.txt
+echo 'cd /usr/share/Sublist3r/; python3 sublist3r.py $@; cd - 1>/dev/null;' > /usr/local/bin/sublist3r
+chmod +x /usr/local/bin/sublist3r
