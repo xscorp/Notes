@@ -1,4 +1,14 @@
 #============================#
+echo "[#] Updating repository list"
+#============================#
+apt-get update
+
+#============================#
+echo "[#] Installing necessary utils"
+#============================#
+apt install unzip
+
+#============================#
 echo "[+] Installing apktool"
 #============================#
 # To download wrapper script
@@ -23,3 +33,14 @@ mv /tmp/ffuf/ffuf /usr/local/bin
 
 # Make the binary executable
 chmod +x /usr/local/bin/ffuf
+
+#============================#
+echo "[+] Installing amass"
+#============================#
+#Downloading Amass release v3.10.5 binary zip file
+wget https://github.com/OWASP/Amass/releases/download/v3.10.5/amass_linux_amd64.zip -O /tmp/amass.zip
+
+#Unziping and moving binary to /usr/local/bin
+unzip /tmp/amass.zip -d /tmp/amass
+mv /tmp/amass/amass*/amass /usr/local/bin
+chmod +x /usr/local/bin/amass
