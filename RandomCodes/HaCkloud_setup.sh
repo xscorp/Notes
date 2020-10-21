@@ -125,3 +125,13 @@ echo "[+] Installing filter-resolved"
 go get github.com/tomnomnom/hacks/filter-resolved
 mv ~/go/bin/filter-resolved /usr/local/bin/
 rm -rf ~/go
+
+#============================#
+echo "[+] Installing SecLists wordlists"
+#============================#
+sudo mkdir /usr/share/wordlists/
+cd /usr/share/wordlists
+wget https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip
+unzip SecLists.zip
+rm -f SecLists.zip
+cd - 1>/dev/null
