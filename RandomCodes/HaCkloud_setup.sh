@@ -1,4 +1,10 @@
 #============================#
+echo "[#] Adding Kali Linux repository to /etc/apt/sources.list"
+#============================#
+echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee /etc/apt/sources.list
+wget -q -O - https://archive.kali.org/archive-key.asc | apt-key add
+
+#============================#
 echo "[#] Updating repository list"
 #============================#
 apt-get update
@@ -6,7 +12,14 @@ apt-get update
 #============================#
 echo "[#] Installing necessary utils"
 #============================#
+echo "[*] Enabling 'main' package"
+sudo add-apt-repository main
+
+echo "[*] Installing unzip"
 apt install unzip
+
+echo "[*] Installing golang-go"
+apt install golang-go
 
 #============================#
 echo "[+] Installing apktool"
@@ -44,3 +57,11 @@ wget https://github.com/OWASP/Amass/releases/download/v3.10.5/amass_linux_amd64.
 unzip /tmp/amass.zip -d /tmp/amass
 mv /tmp/amass/amass*/amass /usr/local/bin
 chmod +x /usr/local/bin/amass
+
+
+#============================#
+echo "[+] Installing httprobe"
+#============================#
+go get -u github.com/tomnomnom/httprobe
+mv ~/go/bin/httprobe /usr/local/bin
+rm -rf ~/go
