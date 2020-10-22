@@ -1,3 +1,8 @@
+##############################################
+#Script to automate setting up security tools#
+#                 ~Shashank Barthwal         #
+##############################################
+
 PURPLE="\033[1;35m"
 NC="\033[0m"
 
