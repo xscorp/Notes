@@ -44,6 +44,7 @@ chmod +x /usr/local/bin/apktool*
 #============================#
 echo "[+] Installing ffuf"
 #============================#
+cd /tmp/
 #Download the v1.1.0 release for Linux-AMD64
 wget https://github.com/ffuf/ffuf/releases/download/v1.1.0/ffuf_1.1.0_linux_amd64.tar.gz -O /tmp/ffuf.tar.gz
 tar -xvzf /tmp/ffuf.tar.gz
@@ -53,6 +54,7 @@ mv /tmp/ffuf/ffuf /usr/local/bin
 
 # Make the binary executable
 chmod +x /usr/local/bin/ffuf
+cd - 1>/dev/null
 
 #============================#
 echo "[+] Installing amass"
@@ -93,7 +95,7 @@ cd - 1>/dev/null
 
 
 #============================#
-echo "[+] Installing Subfinder"
+echo "[+] Installing Wpscan"
 #============================#
 sudo apt-get install wpscan
 
