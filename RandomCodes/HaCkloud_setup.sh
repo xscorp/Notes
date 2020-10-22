@@ -19,6 +19,9 @@ echo "	[*] Enabling 'main' and 'universal' repository"
 sudo add-apt-repository main
 sudo add-apt-repository universe
 
+echo "  [*] Installing build-essential"
+apt install build-essential
+
 echo "	[*] Installing unzip"
 apt install unzip
 
@@ -30,6 +33,9 @@ apt install python3-pip
 
 echo "	[*] Installing ruby"
 apt install ruby
+
+echo "  [*] Installing Java"
+apt install default-jre
 
 #============================#
 echo "${PURPLE}[+] Installing apktool ${NC}"
