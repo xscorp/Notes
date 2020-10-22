@@ -1,16 +1,19 @@
+PURPLE="\033[1;35m"
+NC="\033[0m"
+
 #============================#
-echo "[#] Adding Kali Linux repository to /etc/apt/sources.list"
+echo "${PURPLE}[#] Adding Kali Linux repository to /etc/apt/sources.list ${NC}"
 #============================#
 echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee /etc/apt/sources.list
 wget -q -O - https://archive.kali.org/archive-key.asc | apt-key add
 
 #============================#
-echo "[#] Updating repository list"
+echo -e "${PURPLE}[#] Updating repository list ${NC}"
 #============================#
 apt-get update
 
 #============================#
-echo "[#] Installing necessary utils"
+echo "${PURPLE}[#] Installing necessary utils ${NC}"
 #============================#
 echo "	[*] Enabling 'main' and 'universal' repository"
 sudo add-apt-repository main
@@ -29,7 +32,7 @@ echo "	[*] Installing ruby"
 apt install ruby
 
 #============================#
-echo "[+] Installing apktool"
+echo "${PURPLE}[+] Installing apktool ${NC}"
 #============================#
 # To download wrapper script
 wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool
@@ -42,7 +45,7 @@ mv ./apktool* /usr/local/bin/
 chmod +x /usr/local/bin/apktool*
 
 #============================#
-echo "[+] Installing ffuf"
+echo "${PURPLE}[+] Installing ffuf ${NC}"
 #============================#
 cd /tmp/
 #Download the v1.1.0 release for Linux-AMD64
@@ -57,7 +60,7 @@ chmod +x /usr/local/bin/ffuf
 cd - 1>/dev/null
 
 #============================#
-echo "[+] Installing amass"
+echo "${PURPLE}[+] Installing amass ${NC}"
 #============================#
 #Downloading Amass release v3.10.5 binary zip file
 wget https://github.com/OWASP/Amass/releases/download/v3.10.5/amass_linux_amd64.zip -O /tmp/amass.zip
@@ -68,7 +71,7 @@ mv /tmp/amass/amass*/amass /usr/local/bin
 chmod +x /usr/local/bin/amass
 
 #============================#
-echo "[+] Installing httprobe"
+echo "${PURPLE}[+] Installing httprobe ${NC}"
 #============================#
 go get -u github.com/tomnomnom/httprobe
 mv ~/go/bin/httprobe /usr/local/bin
@@ -76,7 +79,7 @@ rm -rf ~/go
 
 
 #============================#
-echo "[+] Installing Sublist3r"
+echo "${PURPLE}[+] Installing Sublist3r ${NC}"
 #============================#
 git clone https://github.com/aboul3la/Sublist3r.git /usr/share/Sublist3r
 pip3 install -r /usr/share/Sublist3r/requirements.txt
@@ -84,7 +87,7 @@ echo 'cd /usr/share/Sublist3r/; python3 sublist3r.py $@; cd - 1>/dev/null;' > /u
 chmod +x /usr/local/bin/sublist3r
 
 #============================#
-echo "[+] Installing Subfinder"
+echo "${PURPLE}[+] Installing Subfinder ${NC}"
 #============================#
 cd /tmp/
 wget https://github.com/projectdiscovery/subfinder/releases/download/v2.4.5/subfinder_2.4.5_linux_amd64.tar.gz -O /tmp/subfinder.tar.gz
@@ -95,12 +98,12 @@ cd - 1>/dev/null
 
 
 #============================#
-echo "[+] Installing Wpscan"
+echo "${PURPLE}[+] Installing Wpscan ${NC}"
 #============================#
 sudo apt-get install wpscan
 
 #============================#
-echo "[+] Installing Nuclei"
+echo "${PURPLE}[+] Installing Nuclei ${NC}"
 #============================#
 cd /tmp
 wget https://github.com/projectdiscovery/nuclei/releases/download/v2.1.1/nuclei_2.1.1_linux_amd64.tar.gz -O /tmp/nuclei.tar.gz
@@ -111,7 +114,7 @@ cd - 1>/dev/null
 
 
 #============================#
-echo "[+] Installing Naabu"
+echo "${PURPLE}[+] Installing Naabu ${NC}"
 #============================#
 cd /tmp
 wget https://github.com/projectdiscovery/naabu/releases/download/v2.0.2/naabu_2.0.2_linux_amd64.tar.gz -O naabu.tar.gz
@@ -122,14 +125,14 @@ cd - 1>/dev/null
 
 
 #============================#
-echo "[+] Installing filter-resolved"
+echo "${PURPLE}[+] Installing filter-resolved ${NC}"
 #============================#
 go get github.com/tomnomnom/hacks/filter-resolved
 mv ~/go/bin/filter-resolved /usr/local/bin/
 rm -rf ~/go
 
 #============================#
-echo "[+] Installing SecLists wordlists"
+echo "${PURPLE}[+] Installing SecLists wordlists ${NC}"
 #============================#
 sudo mkdir /usr/share/wordlists/
 cd /usr/share/wordlists
