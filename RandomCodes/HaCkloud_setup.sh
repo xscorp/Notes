@@ -151,3 +151,28 @@ wget https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zi
 unzip SecLists.zip
 rm -f SecLists.zip
 cd - 1>/dev/null
+
+#============================#
+echo "${PURPLE}[+] Installing assetfinder ${NC}"
+#============================#
+go get -u github.com/tomnomnom/assetfinder
+mv ~/go/bin/assetfinder /usr/local/bin/
+rm -rf ~/go
+
+#============================#
+echo "${PURPLE}[+] Installing massdns ${NC}"
+#============================#
+git clone https://github.com/blechschmidt/massdns.git /tmp/massdns
+cd /tmp/massdns/
+make
+mv /tmp/massdns/bin/massdns /usr/local/bin/
+cd - 1>/dev/null
+
+#============================#
+echo "${PURPLE}[+] Installing masscan ${NC}"
+#============================#
+git clone https://github.com/robertdavidgraham/masscan /tmp/masscan
+cd /tmp/masscan/
+make
+mv /tmp/masscan/bin/masscan /usr/local/bin/
+cd - 1>/dev/null
