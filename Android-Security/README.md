@@ -19,3 +19,5 @@ An application can be launched without knowing the activity name by simulating t
 It works by checking and executing the activity that has the intent filter with action **android.intent.action.MAIN** and category **android.intent.category.LAUNCHER**  
 Reference: https://stackoverflow.com/questions/29931318/launch-app-via-adb-without-knowing-activity-name  
 
+## Understanding keystores
+Every apk needs to be signed before it can be installed on an android device. Signing the application often makes use of a file called "keystore". A keystore is a container that is used to store cryptographic keys. Why? To mitigate the danger of leaking keys. Every cryptographic key related to the applications is put inside the Keystore and the keystore is used to authenticate everywhere. While creating a keystore, the developer has to specify a password for keystore. Once the keystore is created, keys can be stored inside it by specifying a name for the key, 
