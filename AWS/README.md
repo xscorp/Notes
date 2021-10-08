@@ -13,6 +13,7 @@ We don't necessarily need to hard code our AWS keys in the source code. The SDK 
 * Credentials passed into the client(AWS client)
 * Credentials passed into the session(a default session gets created while working with AWS SDK)
 * Environment variables
-* Credentials file(usually located in ~/.aws/credentials)
+* Credentials file(usually located in ```~/.aws/credentials```) or config file that gets created when we run ```aws configure``` command(usually ```~/.aws/config```)
+* Quering Instance Metadata Service in EC2 instance associated with an IAM role(most preferred way of storing credentials). The IAM role will allow us to generate temperory credentials to access AWS APIs. Hence, we don't need to hard code credentials in the source code.
 
 
