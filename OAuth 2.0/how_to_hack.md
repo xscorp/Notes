@@ -22,3 +22,16 @@ Absense of ```state``` parameter simply means that there is no way for the Clien
 * Intercept the initial OAuth flow request(authorization request) made to the authorization server.
 * Check if there is any state parameter being passed in the request. 
 * If there is no state parameter, the OAuth implementation is vulnerable and the impact may vary.
+
+
+## Leaking authorization codes and access tokens(unvalidated ```redirect_uri```)
+```redirect_uri``` is a parameter that is passed during the authorization request. This parameter tells the OAuth authorization server to send authorization code/access token to this specific callback endpoint/url. If this parameter is not validated, the attacker can pass the URL of an attacker control server to capture the authorization code/access token.  
+In case of Authorization Code grant, once the attacker has obtained the authorization code, it can simply be passed to the original callback endpoint to gain access. The attacker doesn't need to worry about guessing client secret or the process of exchange of tokens as all of that will be handled by the back-channels.   
+To prevent this, OAuth authorization server should always validate the ```redirect_uri``` parameter. Also, the OAuth server should re-validate the ```redirect_uri``` again during the exchange of authorization code with access token to check if the ```redirect_uri``` is same as what was received in the initial authorization request. If not, reject the request otherwise, grant the access token.  
+
+### Steps
+* Intercept the authorization request and replace the ```redirect_uri``` parameter with an attacker controlled endpoint URI.
+* Check if the attacker has received an access token in the server logs.
+* If yes, This means attacker can craft a phishing attack to obtain code/token of other users.
+* In case of Implicit grant type, once the token is obtained, it can be used for making API request to the resource server to fetch the user data.
+* In case of Authorization Code grant type, the attacker simply needs to send the token to the original callback endpoint(original redirect_uri). And the attacker will get access.
