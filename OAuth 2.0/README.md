@@ -12,3 +12,7 @@ Implicit Flow is nearly same as the Authorization Code Flow. The difference is t
 
 Please note that in Implicit Flow, there is no back-channel for secure exchange, everything happens using the browser redirects only and hence, makes this grant type more suspectible to attacks.
 
+For detailed information on OAuth 2.0 Grants, visit [OAuth Grant Types - PortSwigger Academy](https://portswigger.net/web-security/oauth/grant-types).  
+
+
+
