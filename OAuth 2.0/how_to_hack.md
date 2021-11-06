@@ -11,3 +11,14 @@ While implementing the OAuth, the Client App code should always check if the dat
 * Intercept the request where the required user data(email in this case) is being sent to the Client App.
 * Modify the user data and send the request
 * If no response is being printed, use view response in browser feature of Burp.
+  
+  
+  
+## Flawed CSRF protection
+There is a ```state``` parameter which works like a CSRF token for the Client App. It makes sure that the request to the callback endpoint of client application is made by the same person who started the OAuth flow. When OAuth flow is started, an unguessable, unique value in ```state``` parameter(which is tied to the current session) is passed to the OAuth authorization server along with other parameters. After this point, each communication between Client App and OAuth server involves passing the same parameter value back and forth. In case an attacker initiates an OAuth flow using a fake or different ```state``` value, the client app will reject the request as the ```state``` parameter will have a different value than the one which is tied to the current session.   
+Absense of ```state``` parameter simply means that there is no way for the Client Application or the OAuth server to know whether the request/response is originated from the Client App or anybody else.
+
+### Steps
+* Intercept the initial OAuth flow request(authorization request) made to the authorization server.
+* Check if there is any state parameter being passed in the request. 
+* If there is no state parameter, the OAuth implementation is vulnerable and the impact may vary.
