@@ -38,6 +38,12 @@ To prevent this, OAuth authorization server should always validate the ```redire
   
 It is adviced to have a whitelist based approach for allowed ```redirect_uri``` values. But sometimes, the validation logic can still be exploited. Often developers implement the validation in a way which checks if the ```redirect_uri``` parameter starts with a specific domain or string, in that case, we can exploit is by using that allowed domain name as a subdomain in attacker controlled domain.  
 Allowed redirect_uri(must start with) => ```https://client-app.com```  
-Attacer => ```https://client-app.com&@attacker.com```  
+Attacker => ```https://client-app.com&@attacker.com```   
+
+Attacker can try parameter pollution as well, i.e. passing multiple values of ```redirect_uri``` parameter. Example: ```/auth?redirect_uri=https://client.com/callback&redirect_uri=http://attacker.com/callback```.   
+
+Also, sometimes, a separate validation is done for localhost URIs. The validation logic checks for if the supplied ```redirect_uri``` starts with ```localhost``` or not. In that case, an attacker can simply have a subdomain like ```https://localhost.attacker.com```.   
+
+
 
 
