@@ -34,4 +34,10 @@ To prevent this, OAuth authorization server should always validate the ```redire
 * Check if the attacker has received an access token in the server logs.
 * If yes, This means attacker can craft a phishing attack to obtain code/token of other users.
 * In case of Implicit grant type, once the token is obtained, it can be used for making API request to the resource server to fetch the user data.
-* In case of Authorization Code grant type, the attacker simply needs to send the token to the original callback endpoint(original redirect_uri). And the attacker will get access.
+* In case of Authorization Code grant type, the attacker simply needs to send the token to the original callback endpoint(original redirect_uri). And the attacker will get access.  
+  
+It is adviced to have a whitelist based approach for allowed ```redirect_uri``` values. But sometimes, the validation logic can still be exploited. Often developers implement the validation in a way which checks if the ```redirect_uri``` parameter starts with a specific domain or string, in that case, we can exploit is by using that allowed domain name as a subdomain in attacker controlled domain.  
+Allowed redirect_uri(must start with) => ```https://client-app.com```  
+Attacer => ```https://client-app.com&@attacker.com```  
+
+
