@@ -1,5 +1,9 @@
 # List of basic questions that I need to check to clear my basics   
 
+### What are some of the use cases of IAM Roles?  
+https://www.javatpoint.com/aws-iam-roles-use-cases 
+
+
 ### What is path prefix in AWS?  
 Path is a friendly name configured to better organize the users and resources etc. A path may look like ```/company/product/engineering/username```. In this way, we can create iam roles and policies to allow users to do something based on that path.  
 Source: [https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html]()
