@@ -4,6 +4,11 @@
 https://www.javatpoint.com/aws-iam-roles-use-cases 
 
 
+### What is an instance profile in AWS?  
+Instance profile is a container for IAM Roles. In simply words, An instance profile is a kind of role attached to an EC2 instance.
+Source: [https://www.youtube.com/watch?v=EVmbnmae3vg]()
+
+
 ### What is path prefix in AWS?  
 Path is a friendly name configured to better organize the users and resources etc. A path may look like ```/company/product/engineering/username```. In this way, we can create iam roles and policies to allow users to do something based on that path.  
 Source: [https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html]()
