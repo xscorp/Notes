@@ -1,7 +1,7 @@
 # Redis
 
 ## Description
-Redis - Redis is an in-memory database that is used for caching data for faster lookups and sometimes, It is used as a complete database for an application. It stores the value in a key-value based data structure.
+Redis is an in-memory database that is used for caching data for faster lookups and sometimes, It is used as a complete database for an application. It stores the data in a key-value based data structure.
 
 
 ## Installation
