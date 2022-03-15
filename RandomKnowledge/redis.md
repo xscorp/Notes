@@ -1,15 +1,15 @@
 # Redis
 
 ## Description
-Redis - Redis is an in-memory database that is used for caching responses and sometimes, as a complete database. It stores the value in a key-value based data structure.
+Redis - Redis is an in-memory database that is used for caching data for faster lookups and sometimes, It is used as a complete database for an application. It stores the value in a key-value based data structure.
 
 
 ## Installation
 ### MAC
-```brew install redis```
+```$ brew install redis```
 
 ### Python Module
-```pip3 install redis```
+```$ pip3 install redis```
 
 
 ## Basic working
@@ -61,4 +61,38 @@ True
 >>> 
 >>> redis_client.keys()
 [b'pass', b'name']
+```
+
+## Key expiration
+### redis-cli
+```python
+127.0.0.1:6379> get name
+"xscorp"
+127.0.0.1:6379> EXPIRE name 10
+(integer) 1
+127.0.0.1:6379> get name
+"xscorp"
+127.0.0.1:6379> get name
+(nil)
+```
+
+### In python
+```python
+>>> import redis
+>>> 
+>>> redis_client = redis.Redis(host = "127.0.0.1" , port = 6379 , db = 0)
+>>> 
+>>> redis_client.get("pass").decode()
+'jett123'
+>>> 
+>>> redis_client.expire("pass" , time = 10)
+True
+>>> 
+>>> redis_client.get("pass").decode()
+'jett123'
+>>> 
+>>> redis_client.get("pass").decode()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'NoneType' object has no attribute 'decode'
 ```
