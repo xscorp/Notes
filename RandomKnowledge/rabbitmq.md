@@ -29,7 +29,7 @@ pip3 install pika
 ```
 Here is an example consisting of *send.py* which shows how to push data to a queue and *receive.py* which shows how to consume data from a queue.
 
-### *send.py*
+#### *send.py*
 ```python
 import pika
 
@@ -58,7 +58,7 @@ print(f"Sent: {msg_body}")
 rabbitmq_connection.close()
 ```
 
-### *receive.py*
+#### *receive.py*
 ```python
 import pika
 import sys
@@ -82,6 +82,89 @@ def main():
     channel.basic_consume(
         queue = "hello" , 
         auto_ack = True ,
+        on_message_callback = rabbitmq_callback
+    )
+
+    # Listening for messages
+    print("[+] Listening for messages")
+    channel.start_consuming()
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        sys.exit()
+```
+
+The above program was very basic and is not reliable. In case a consumer goes down for some reason, all the data assigned to it on the queue will be lost. For this, we can use explicit acknowledgement so the an ACK is only sent when the data is received and processed. 
+Also, if the RabbitMQ server goes down for sometime, all the data inside it will be lost. So to withstand a RabbitMQ failure, We need to mark our queue as *durable*. Please note that to achieve this, we need to mark both the queue as well as messages as persistent. A durable program can be found below.
+
+#### *send.py*
+```python
+import pika
+import sys
+
+# Connecting to rabbitmq service
+rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host = "127.0.0.1"))
+
+# Creating a channel to connect to a queue
+channel = rabbitmq_connection.channel()
+
+# Declaring queue (durable = True is used for persistent queue)
+channel.queue_declare(queue = "hello" , durable = True)
+
+# Message
+msg_body = sys.argv[1]
+
+# Publishing(Sending) a message to queue
+channel.basic_publish(
+    exchange = "" ,
+    routing_key = "hello" ,
+    body = msg_body ,
+    properties = pika.BasicProperties(
+        # For persistent message
+        delivery_mode = pika.spec.PERSISTENT_DELIVERY_MODE
+    )
+)
+
+print(f"Sent: {msg_body}")
+
+# Flushing the network buffer (Closing the connection)
+rabbitmq_connection.close()
+```
+
+#### *receive.py*
+```python
+import pika
+import time
+import sys
+
+def main():
+    # Connecting to rabbitmq service
+    rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host = "127.0.0.1"))
+
+    # Creating channel
+    channel = rabbitmq_connection.channel()
+
+    # Declaring queue
+    channel.queue_declare(queue = "hello" , durable = True)
+
+    # Callback function to call everytime we consume a queue
+    def rabbitmq_callback(ch , method , properties , body):
+        print(f"Processing: {body}")
+        time.sleep(body.count(b"."))
+        print("Done")
+        # Explicit acknowledgement for reliability
+        ch.basic_ack(delivery_tag = method.delivery_tag)
+
+
+    # Setting prefetch count
+    channel.basic_qos(prefetch_count = 1)
+
+    # Declaring callback function
+    channel.basic_consume(
+        queue = "hello" , 
         on_message_callback = rabbitmq_callback
     )
 
