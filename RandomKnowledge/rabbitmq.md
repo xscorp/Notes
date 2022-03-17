@@ -144,4 +144,12 @@ Listing connections ...
 user	peer_host	peer_port	state
 guest	172.17.0.1	59690	running
 guest	172.17.0.1	59696	running
+root@myrabbit:/#
+root@myrabbit:/# rabbitmqctl list_queues name messages_ready messages_unacknowledged
+Timeout: 60.0 seconds ...
+Listing queues for vhost / ...
+name	messages_ready	messages_unacknowledged
+amq.gen-PcYyoN328MI5JEuVGYKsxw	0	0
+amq.gen-7DzAKY9Gs5bEOAxcMt-sFA	0	0
+
 ```
