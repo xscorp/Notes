@@ -180,6 +180,9 @@ if __name__ == "__main__":
         sys.exit()
 ```
 
+As can be seen in all the above codes, we are passing an empty(" ") exchange which allows RabbitMQ to use the default exchange to send messages to queues. Other thing that could be seen is, if we have multiple consumers, a message is received by either of them but not all. Once message is received by one consumer only. But there might be cases where all the consumers need to receive all the messages(for example, log monitoring). In this case, we can create multiple queues and transfer data to each of them. But this process can be managed nicely using an exchange. As described in the fundamentals, exchange is a routing agent which routes messages to different queues.
+In a modified version of the above programs, the sender 
+
 
 ## Rabbitmq commands for monitoring
 ```console
