@@ -1,0 +1,25 @@
+id: cisco-webui-detection
+info:
+  name: Cisco WebUI Detection
+  author: xscorp
+  severity: info
+  description: |
+    This module identifies web applications that are running Cisco Web UI instance.
+  remediation: |
+    Disable the Cisco Web UI if not needed, and update the Cisco IOS to latest version.
+  reference: |
+    https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-iosxe-webui-privesc-j22SaA4z
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/webui"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "by Cisco Systems, Inc."
+          - "/webui/login/"
+        part: body
+
