@@ -80,3 +80,28 @@ This will signify that Accounts table only has 4 columns as we started getting e
 ```
 
 This again signifies that there are only 4 columns in the table.
+
+<br/><br/>
+
+
+### SQL Injection Conditional Errors Attack
+
+In case of when a server responds the same way regardless of whether the query returned any data or not, There would be no difference in the HTTP response for us to investigate. In such cases, We can trigger conditional SQL errors to extract data. The basic idea behind this technique is:
+
+- Try triggering an error (by appending `'` to the query or something else)
+- If a generic error response is being shown such as 500 Server Error, Check if the issue is actually caused by SQL query and not something else.
+- Once confirmed, Use conditional error triggering technique to fetch data:
+```
+If substring(password, 1, 1) = 'a'
+  yay
+else
+  trigger error - example: TO_CHAR(1/0)
+```
+
+Now in actual, It works like this. Lets say we have injection on an `id` parameter and we have to fetch password for `admin` username from `users` table. Then The exploit query would be like this:
+
+```
+?id=xyz' AND (SELECT CASE WHEN (SUBSTR(password,POZZ,1)='FUZZ') THEN 'a' ELSE TO_CHAR(1/0) END FROM users WHERE username='admin') = 'a' --comment
+```
+
+Here, POZZ is the position being fuzzed and FUZZ is character for password. Also notice that we are returning 'a' if the condition turns out to be true to later compare it with the outer 'a' in the SQL query. This is done because you must put a condition after `AND`. As We are executing our query after `AND`, It needs to be a comparision and not a query. 
