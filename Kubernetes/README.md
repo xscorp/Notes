@@ -1,10 +1,16 @@
 ## Kubernetes Basics
 
-**Cluster**: Cluster is simply a group of computers/VMs (also called Nodes in Kubernetes) that are connected to work like a single unit.
-**Node**: A physical computer or a VM in the cluster.
-**Pod**: A group of containers in a node. While a container is the smallest unit in containerized environment, In k8s, A pod is the smallest deployment unit which consist of one or more containers which share all kinds of resources like volumes etc. So basically a pod is a group of one or more containers.
-**Kubelet**: An agent to manage everything in a node. Kublet communicates with the Control Plane through Kubernetes API.
-**Control Plane**: Program that manages all necessary things in a cluster like managing, scheduling, scaling etc.
+### Basic Terminology
+
+* **Cluster**: Cluster is simply a group of computers/VMs (also called Nodes in Kubernetes) that are connected to work like a single unit.
+
+* **Node**: A physical computer or a VM in the cluster.
+
+* **Pod**: A group of containers in a node. While a container is the smallest unit in containerized environment, In k8s, A pod is the smallest deployment unit which consist of one or more containers which share all kinds of resources like volumes etc. So basically a pod is a group of one or more containers.
+
+* **Kubelet**: An agent to manage everything in a node. Kublet communicates with the Control Plane through Kubernetes API.
+
+* **Control Plane**: Program that manages all necessary things in a cluster like managing, scheduling, scaling etc.
 
 <br/><br/>
 
