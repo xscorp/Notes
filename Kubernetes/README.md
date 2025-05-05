@@ -227,3 +227,48 @@ Example:
 ```bash
 kubectl rollout undo deployments/kubernetes-bootcamp --to-revision 2
 ```
+
+
+<br/><br/>
+
+### Replications
+
+Pod replicas can be set similar to what we do in docker compose. Replicas allows us to specify how many pods to keep running at any point in time.
+
+There are two ways specify replicas - Through `ReplicationController` and through `Replica Sets`. The formed is an older technique which is now replaced by the latter.
+
+To understand the usage of both, consider an `nginx` pod created using the following config:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx:latest
+```
+
+Now lets say we want to have atleast 3 pods of this running at any moment. 
+
+#### Using `ReplicationController`
+```yaml
+apiVersion: app/v1
+kind: ReplicationController
+metadata:
+  name: nginx-rc
+  labels:
+    app: myapp
+
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: nginx
+
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:latest
+```
