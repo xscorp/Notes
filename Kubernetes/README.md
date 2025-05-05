@@ -235,7 +235,7 @@ kubectl rollout undo deployments/kubernetes-bootcamp --to-revision 2
 
 Pod replicas can be set similar to what we do in docker compose. Replicas allows us to specify how many pods to keep running at any point in time.
 
-There are two ways specify replicas - Through `ReplicationController` and through `Replica Sets`. The formed is an older technique which is now replaced by the latter.
+There are two ways specify replicas - Through `ReplicationController` and through `Replica Set`. The formed is an older technique which is now replaced by the latter.
 
 To understand the usage of both, consider an `nginx` pod created using the following config:
 ```yaml
@@ -250,11 +250,11 @@ spec:
       image: nginx:latest
 ```
 
-Now lets say we want to have atleast 3 pods of this running at any moment. 
+Now lets say we want to have atleast 3 pods of this running at any moment. We can do this the following two ways:
 
 #### Using `ReplicationController`
 ```yaml
-apiVersion: app/v1
+apiVersion: v1
 kind: ReplicationController
 metadata:
   name: nginx-rc
@@ -271,4 +271,51 @@ spec:
       containers:
         - name: nginx-container
           image: nginx:latest
+```
+
+#### Using `ReplicaSet`
+```yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-rs
+  labels:
+    app: myapp
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: myapp
+
+  template:
+    metadata:
+      name: nginx
+
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:latest
+```
+
+The key difference in the replicaset is the capability to specify selectors which are used for specifying what all types of resources the replication should apply to, even if they are created independently. The other difference is the usage of `apps/v1` instead of `v1` in the `apiVersion`. It is simply because `ReplicaSet` is available in the new `apps/v1` API and no on the older `v1` API.
+
+The reason we need to specify the entire `template` field even when we have selectors is to allow the Replica set to spawn the necessary pods in case there are lesser pods. The Replica set needs to know what type of pod to create, Thats why entire pod definition is passed in the `template` field.
+
+Couple of handy commands while dealing with `ReplicaSet`:
+
+* To list all replica sets
+```bash
+kubectl get replicaset
+```
+
+* To modify an existing replica set
+```bash
+kubectl replace replicaset <replicaset_name> ...
+```
+
+* To easily edit the configuration of a replicaset live
+```bash
+kubectl edit replicaset <replicaset_name>
 ```
