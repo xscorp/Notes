@@ -43,6 +43,40 @@ There are mainly 3 kinds of service types:
 * **NodePort**: It makes the logical set of pods accessible through a port in each of the nodes. While its not very usable, It is mostly used for testing/debugging.
 * **LoadBalancer**: It is used in cloud environments. It is used for exposing the logical set of pods through a load balancer. When the service type is specified as `LoadBalancer`, It provisions a load balancer in the cloud environment automatically and makes it accessible through it. It is mostly used for exposing your application outside the cluster.
 
+**Creating a service**
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+      name: <service-name>
+spec:
+      type: <service-type>
+      ports:
+            - targetPort: <port_on_which_the_application_is_accessible_in_pod>
+              port: <port_on_which_the_service_would_be_accessible> (usually same as the targetPort)
+              nodePort: <port_on_which_the_application_needs_to_be_exposed_in_each_host> (optional, only used in NodePort)
+      selector:
+            <label_name>: <label_value> (Used for selecting the pods on which this service should apply)
+```
+
+Example:
+Lets say we have multiple pods related to a backend python HTTP service running listening on port `80`. And we want to make it accessible on each node on port `8443`. Then the service definition would look something like this:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+      name: backend-service
+spec:
+      type: NodePort
+      ports:
+            - targetPort: 80
+              port: 80
+              nodePort: 8443
+      selector:
+            app=python-http-server
+```
+
 <br/><br/>
 
 ### Default Communication Behaviour
