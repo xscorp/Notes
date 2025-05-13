@@ -353,3 +353,25 @@ kubectl replace replicaset <replicaset_name> ...
 ```bash
 kubectl edit replicaset <replicaset_name>
 ```
+
+
+<br/><br/>
+
+### Namespaces
+
+Namespace is an isolated environment to work with clusters. A namespace named `default` is created by default during initialization of kubernetes.
+
+To operate on a specific namespace, just append `--namespace=<namespace_name>` in any `kubectl` command.
+
+For an example, To create pods in a specific namespace, Just do:
+```bash
+kubectl run nginx --image=nginx --namespace="my-namespace"
+```
+
+For communicating with resources in other namespaces, the following DNS convention can be used:
+
+`<resource-name>.<namespace-name>.svc.cluster.local`
+
+For an example, If we are operating in the `default` namespace and want ot access a container named `main-webapp` in a namespaced named `staging`, We can access it using the DNS name: `main-webapp.staging.svc.cluster.local`.
+
+When a new service is created, a DNS entry with this convention is automatically added.
