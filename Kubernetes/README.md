@@ -375,3 +375,30 @@ For communicating with resources in other namespaces, the following DNS conventi
 For an example, If we are operating in the `default` namespace and want ot access a container named `main-webapp` in a namespaced named `staging`, We can access it using the DNS name: `main-webapp.staging.svc.cluster.local`.
 
 When a new service is created, a DNS entry with this convention is automatically added.
+
+
+<br/><br/>
+
+### Arguments in Docker Containers & Kubernetes Pods
+
+The difference between `ENTRYPOINT` and `CMD` in a Dockerfile is that `ENTRYPOINT` tells what to execute ultimately in the container. If we don't specify any entrypoint, It's value by default is set to `/bin/sh -c`. And whatever we pass as `CMD` is then passed as the *arguments to entrypoint*. So if we set `ENTRYPOINT` as `["/bin/cat"]` and set `CMD` as `["/etc/passwd"]`, The ultimate command executed would be `/bin/cat /etc/passwd`.
+
+This is done this way so that main binary can be separated from the arguments provided to a container. For example, If we have a dedicated container to run `nuclei`, We won't need to pass the word "nuclei" in the args as it will already be set as `ENTRYPOINT`. We simply need to pass the flags as `CMD`.
+
+In Kubernetes, The following mapping is there:
+* `ENTRYPOINT` -> `command`
+* `CMD` -> `args`
+
+Example:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nuclei-pod
+spec:
+  containers:
+    - name: nuclei-pod
+      image: nuclei:latest
+      command: ["~/go/bin/nuclei"]
+      args: ["-u" , "https://example.com" , "-t" , "~/nuclei-templates/http/exposures"]
+```
