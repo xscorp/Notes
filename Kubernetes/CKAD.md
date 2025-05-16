@@ -130,3 +130,10 @@ spec:
 
 > NOTE: Please note that `envFrom` is a list object while `valueFrom` is not!
 
+The `Secret` object can also be created through command line:
+```bash
+kubectl create secret generic <secret_name> \
+--from-literal=KEY1=VALUE1 \
+--from-literal=KEY2=VALUE2
+```
+
