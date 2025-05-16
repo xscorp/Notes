@@ -1,7 +1,7 @@
 
 ## CKAD Preparation
 
-### Passing environment variables in Kubernetes
+### Environment Variables & Secrets
 
 There are three ways to set environment variables in Kubernetes:
 
@@ -59,12 +59,9 @@ metadata:
 spec:
   containers:
     - name: random
-      env:
-        - name: <name_of_the_key>
-          valueFrom:
-            configMapKeyRef:
-                name: <name_of_the_config_map>
-                key: <name_of_the_key>
+      envFrom:
+        - configMapRef:
+            name: <name_of_the_config_map>
 ```
 
 However, If we only want specific keys from the file, Then instead of the above `envFrom`, `valueFrom` should be used:
@@ -76,10 +73,60 @@ metadata:
 spec:
   containers:
     - name: random
-      envFrom:
-        - configMapRef:
-            name: <name_of_the_config_map>
+      env:
+        - name: <name_of_the_key>
+          valueFrom:
+            configMapKeyRef:
+                name: <name_of_the_config_map>
+                key: <name_of_the_key>
 ```
 
 #### Through Secrets:
+
+While environment variables can be pushed through key-value mapping or config maps, storing sensitive secrets like password, api key etc is stored via `Secret` (It uses fkin Base64 to encode is, so never ever use it in production).
+
+To createa a secret, The same format of type `ConfigMap` is used, however `kind` is set to `Secret`.
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: <secret_name>
+data:
+  SECRET_KEY_1: SECRET_VALUE_1
+  SECRET_KEY_2: SECRET_VALUE_2
+```
+
+
+To reference a secret object, The same `envFrom` can be used. However, instead of `configMapRef`, We will use `secretRef`.
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+spec:
+  containers:
+    - name: random
+      envFrom:
+        - secretRef:
+            name: <secret_name>
+```
+
+To only reference specific keys from the secret, We can use `valueFrom` with `secretKeyRef`.
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+spec:
+  containers:
+    - name: random
+      env:
+        - name: SECRET_KEY_1
+          valueFrom:
+            secretKeyRef:
+              key: SECRET_KEY_1
+              name: <secret_name>
+```
+
+> NOTE: Please note that `envFrom` is a list object while `valueFrom` is not!
 
