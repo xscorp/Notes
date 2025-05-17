@@ -137,3 +137,64 @@ kubectl create secret generic <secret_name> \
 --from-literal=KEY2=VALUE2
 ```
 
+
+<br/><br/>
+
+### Security Context in Kubernetes
+
+While running a pod, We can specify properties associated with security context such as user ID to run the pod/container with and necessary capabilities.
+
+For an example, If there is a pod consisting of multiple containers. And we want all of them to run with a specific user ID (lets say 1001), We can specify it the following way under `securityContext`.
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random-pod
+spec:
+  securityContext:
+    runAsUser: 1001
+  containers:
+    - name: random-container
+      image: nginx
+
+    - name: random-container-2
+      image: mysql
+```
+
+We can also specify container specific security context:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random-pod
+spec:
+  containers:
+    - name: random-container
+      image: nginx
+      securityContext:
+        runAsUser: 1001
+
+    - name: random-container-2
+      image: mysql
+```
+
+We can also specify capabilities to containers (Only supported for container specific security context and not for Pods)
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random-pod
+spec:
+  containers:
+    - name: random-container
+      image: nginx
+      securityContext:
+        runAsUser: 1001
+        capabilities:
+          add: ["SYS_TIME", "NET_ADMIN"]
+
+    - name: random-container-2
+      image: mysql
+```
+
+The first priority is always given to the container specific security context. If it is absent, only then the pod specific security context is considered.
