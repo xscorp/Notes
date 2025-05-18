@@ -198,3 +198,95 @@ spec:
 ```
 
 The first priority is always given to the container specific security context. If it is absent, only then the pod specific security context is considered.
+
+<br/><br/>
+
+### Resource Management in Kubernetes
+
+Pod and container specific resource requirements can be specified.
+* **Resource Requests**: Actual value of CPU/Memory to actually assign to a resource.
+* **Resource Limits**: Maximum allowed value of CPU/Memry to a resource.
+
+The resource limits and requests can be specified in `resources` property under `spec`.
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random-pod
+spec:
+  containers:
+    - name: random-container
+      image: ubuntu
+      resources:
+        limits:
+          memory: "2Gi"
+          cpu: "1000m"
+        requests:
+          memory: "1Gi"
+          cpu: "500m"
+```
+
+In a sophisticated environment with multiple containers, We can directly manage resources at pod level instead of individual containers.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random-pod
+spec:
+  resources:
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+  containers:
+    - name: random-container
+      image: ubuntu
+```
+
+> **This feature is in alpha release till now, therefore its reliability can't be guarenteed.**
+
+There are couple of memory units, which follow the following standard:
+```
+1M = 1000K
+1Mi = 1024K
+1G = 1000M
+1Gi = 1024M
+```
+
+Similarly, for CPU, Numbers correspond to CPU core(s):
+```
+1 = 1000m = 1 vCPU / 1 core
+0.5 = 500m = half of 1 vCPU / 1 core
+```
+
+<br/><br/>
+
+### Service Accounts in Kubernetes
+
+Service accounts are used by kubernetes components and applications to communicate with kubernetes API service. A pod is able to communicate with the kube API because it has the required token. Whenever we create a pod/token, A default service account is created for each namespace by default.
+
+To be able to communicate with the kube API, the following steps are followed:
+1. Create a service account
+```bash
+kubectl create serviceaccount <service_account_name>
+```
+
+2. Generate an authentication token for the service account
+```bash
+kubectl create token <service_account_name>
+```
+
+3. Mention the service account reference in your deployment/pod definition file:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random
+spec:
+  containers:
+    name: random
+  serviceAccountName: dashboard-sa
+```
