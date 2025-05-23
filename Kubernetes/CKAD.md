@@ -290,3 +290,56 @@ spec:
     name: random
   serviceAccountName: dashboard-sa
 ```
+
+<br/><br/>
+
+### Taints & Tolerations
+
+Taints and tolerations are sort of labels. They are used to ensure certain pods run/don't run on certain nodes. If we have a pod that requires high memory and CPU, and a specific architecture, We can label the nodes and pods in such a way that only the pods with matching labels are allowed to run on a node.
+
+* Taints are the labels assigned to nodes, while tolerations are the labels assigned to pods.
+* When a pod P is eligible to run on a node N with taint T, We say "Pod P is tolerant the taint T on node N".
+
+To apply taint to a node:
+```bash
+kubectl taint node <node_name> <key>=<value>:<taint_effect>
+```
+
+Example:
+```bash
+kubectl taint node node1 type=high_cpu:NoSchedule
+```
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random-pod
+spec:
+  containers:
+    - name: random-pod
+      image: nginx
+
+  tolerations:
+    - key: "type"
+      operator: "Equal"
+      value: "high_cpu"
+      effect: "NoSchedule"
+```
+
+Similarly, To untaint a node, append a hyphen (`-`) post the command:
+```bash
+kubectl taint node <node_name> <key>=<value>:<taint_effect>-
+```
+
+*Remember that the value of the key, operator, value, effect should be in quotes. There are other operators like "Exists" in which case the field "value" is not required.*
+
+Taint Effect is used for specifying what will happend to the pods if they don't tolerate the taint. It can be any of the following values:
+* `NoSchedule`: If the pod doesn't tolerate the taint, don't schedule it on this node.
+* `PreferNoSchedule`: If the pod doesn't tolerate the taint, prefer not scheduling it on this node. However if there is no better option left, then it can do.
+* `NoExecute`: If the pod doesn't tolerate the taint, don't schedule it on this node. If there are any existing pods running on this node, check if they are tolerant to the taint. If they are not, remove them too.
+
+The only difference between `NoSchedule` and `NoExecute` is that `NoSchedule` doesn't remove existing pods if the taint is added later. It just makes sure the new pods tolerate the taint. However `NoExecute` is strict, It does the same thing that `NoSchedule` does, but it also removes the existing intolerant pods.
+
+> NOTE: If we taint a node to only accept certain pods with tolerations, doesn't mean that the pod will always execute on this node. Even if there are nodes which are not tainted, the pod can get execute on them also. So, **tainting a node doesn't tell pods on what node to execute, but it only tells the node what kind of pod to accept. A non-tainted node can accept pods with any tolerations.**
+
