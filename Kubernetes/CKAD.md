@@ -343,3 +343,60 @@ The only difference between `NoSchedule` and `NoExecute` is that `NoSchedule` do
 
 > NOTE: If we taint a node to only accept certain pods with tolerations, doesn't mean that the pod will always execute on this node. Even if there are nodes which are not tainted, the pod can get execute on them also. So, **tainting a node doesn't tell pods on what node to execute, but it only tells the node what kind of pod to accept. A non-tainted node can accept pods with any tolerations.**
 
+<br/><br/>
+
+### Node Affinity
+
+While taints and tolerations are a way for node to specify what type of pods it want to run in itself, Node Affinity is a way for pods to specify what type of node they want themselves to run. Same as taints and tolerations, It is also achieved via labels.
+
+For an example, If a deployment/pod needs to be run only on nodes labled as `gpu_power:high`, This is how the definition file of the pod looks like:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: gpu_power
+                operator: In
+                values:
+                  - high
+  containers:
+    - name: random-pod
+      image: nginx
+```
+
+Note that it is better than the simple `nodeSelector` as it offers you more operators like `In`, `Exists` etc. When `Exists` is used, The `values` is not needed.
+
+<br/><br/>
+
+### Init Containers
+
+Init containers are short-lived containers which are executed before the main container. It is a kind of helper container which is needed to make sure the necessary dependencies and setup is in place for the main container to work. Unlike the usual multi-container pod setup where all the containers start and end together, It isn't the case with init containers. The init containers have the following properties:
+* Defined using `initContainers` on the same level as `containers`.
+* Structure is same as that of `containers`.
+* There can be multiple init containers, each of them is **executed sequentially**. If one of the init containers fails, The pod is restarted.
+* All init containers must finish before the main containers start.
+
+This is how init containers are defined:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random
+spec:
+  initContainers:
+    - name: connect-to-db
+      image: mysql-client
+
+    - name: git-pull
+      image: alpine
+
+  containers:
+    - name: random-pod
+      image: nginx
+```
