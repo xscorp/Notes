@@ -79,3 +79,37 @@ In case of multiple container pod, A specific container can be specified like:
 ```bash
 kubectl logs <pod_name> <container_name>
 ```
+
+
+<br/><br/>
+
+### Monitoring through Metrics
+
+By default there is no way to view metrics related to CPU and Memory consumption by the nodes and pods. A metrics server needs to be setup for this.
+
+To set up a metrics server, The following definition is used:
+```
+https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.7.2/components.yaml
+```
+
+And therefore, to apply it:
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.7.2/components.yaml
+```
+
+Once done, metrics can be seen by the following commands for nodes and pods:
+```bash
+controlplane ~ ✖ k top node
+NAME           CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)   
+controlplane   323m         2%       867Mi           1%          
+node01         40m          0%       148Mi           0%        
+```
+
+Similarly, for pods:
+```bash
+controlplane ~ ➜  k top pod
+NAME       CPU(cores)   MEMORY(bytes)   
+pod01      23m           30Mi            
+pod02       1m           16Mi            
+pod03     156m          250Mi
+```
