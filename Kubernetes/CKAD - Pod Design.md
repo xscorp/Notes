@@ -48,7 +48,7 @@ metadata:
 spec:
   completions: 2    # Atleast 2 completions required, spawn as much as you want
   parallelism: 3    # Run 3 pods at once, default is one at a time.
-  backoffLimit: 5   # Wait for 5 seconds, to make sure pod doesn't get destroyed even before the job finishes.
+  backoffLimit: 10   # Maximum number of retries before considering a job failed.
   template:
     spec:
         containers:
