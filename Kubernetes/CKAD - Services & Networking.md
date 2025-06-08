@@ -187,7 +187,9 @@ $ kubectl expose deployments/red-deployment --type=ClusterIP --port=80 --target-
 $ kubectl expose deployments/blue-deployment --type=ClusterIP --port=80 --target-port=567
 ```
 
-Please note that we could have used the service port (`--port`) as `5678`. But the service port is used by ingress resource and it makes it accessible on the service port. Since we want our deployments to be accessible on port 80 of the main IP, We need to put `80` as service port.
+~~Please note that we could have used the service port (`--port`) as `5678`. But the service port is used by ingress resource and it makes it accessible on the service port. Since we want our deployments to be accessible on port 80 of the main IP, We need to put `80` as service port.~~
+
+*Any port can be choosen for service port as ingress always listens on port 80 and 443 and will redirect you to the right service and right port based on the route rules.*
 
 
 Before creating an ingress resource, We need to make sure our kubernetes deployment supports Ingress. In minikube, The Nginx Ingress controller can be enabled simply by:
