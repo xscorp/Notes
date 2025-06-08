@@ -76,5 +76,159 @@ spec:
 
 In the days when on-premises infrastructure was common, People used to have a single load balancer or a single reverse proxy for all their needs. It did host/path based routing for all the different services, and had other cool features also. Some examples are - Nginx, F5, Trafeik etc.
 
-Later when kubernetes came, Kubernetes had `LoadBalancer` service type to provision a load balancer. But it lacked the host/path based routing, route rewrites and additional capabilities. Also, each publicly exposed service in kubernetes required it's own load balancer costing
+Later when kubernetes came, Kubernetes had `LoadBalancer` service type to provision a load balancer. But it lacked the host/path based routing, route rewrites and additional capabilities, WAF capabilities, etc. Also, each publicly exposed service in kubernetes required it's own load balancer costing a lot of money for the organizations.
+
+To overcome this, Kubernetes asked the companies like F5, Cloudflare etc to create a kubernetes version of their products like Nginx, called `Ingress Controllers`. And then deployments can create `Ingress Resource` to be able to use it.
+
+So now if we want a single load balancer for all the services deployed in the company? We can use an nginx or similar deployment. But maintaining it will be difficult. Everytime a new service needs to be integrated, we need to get inside the nginx deployment, change the routes, the reload the Nginx. So maintainence will be all manual. But ingress version of this, called "Nginx Ingress Controller" would allow developers to write a nice YAML to define their rules, and then automatically reload the Nginx, do certificate management etc.
+
+As conclusion, In large environments, Ingress Controllers are the preferred way for load balancing as they are scalable, easily maintainable and reduce cost.
+
+Once an ingress controller is configured, This is how an ingress resource is created to route to an application:
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: color-deployments-ingress
+
+spec:
+    ingressClassName: nginx
+    rules:
+        - http:
+            paths:
+                - path: /red
+                  pathType: Prefix
+                  backend:
+                    service:
+                        name: red-deployment
+                        port:
+                            number: 80
+
+                - path: /blue
+                  pathType: Prefix
+                  backend:
+                    service:
+                        name: blue-deployment
+                        port:
+                            number: 80
+          host: kube.local
+```
+
+As can be seen, It specifies that `/red` path on the host `kube.local` on port `80` (service port) will route to `red-deployment` service. And a similar `/blue` path for `blue-deployment`.
+
+Now if a user visits `http://kube.local/red`, They will be routed to the `red-deployment` and `http://kube.local/blue` to the `blue-deployment`.
+
+<br/>
+
+#### Using Ingress Controllers and Resources
+
+Consider a scenerio where we have two deployments:
+
+`red-deployment`
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: red-deployment
+
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: red
+    template:
+        metadata:
+            labels:
+                app: red
+
+        spec:
+            containers:
+                - name: red-pod
+                  image: hashicorp/http-echo
+                  args: 
+                    - "-text=<html><body style='background-color:red'></body></html>"
+                  ports:
+                    - containerPort: 5678
+```
+
+`blue-deployment`
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: blue-deployment
+
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: blue
+    template:
+        metadata:
+            labels:
+                app: blue
+
+        spec:
+            containers:
+                - name: blue-pod
+                  image: hashicorp/http-echo
+                  args: 
+                    - "-text=<html><body style='background-color:blue'></body></html>"
+                  ports:
+                    - containerPort: 5678
+```
+
+These deployments simply host a webapp on port `5678` that displays red and blue color depending on their deployment.
+
+Exposing the deployments:
+```bash
+$ kubectl expose deployments/red-deployment --type=ClusterIP --port=80 --target-port=567
+
+$ kubectl expose deployments/blue-deployment --type=ClusterIP --port=80 --target-port=567
+```
+
+Please note that we could have used the service port (`--port`) as `5678`. But the service port is used by ingress resource and it makes it accessible on the service port. Since we want our deployments to be accessible on port 80 of the main IP, We need to put `80` as service port.
+
+
+Before creating an ingress resource, We need to make sure our kubernetes deployment supports Ingress. In minikube, The Nginx Ingress controller can be enabled simply by:
+```bash
+$ minikube addons enable ingress
+```
+
+In real environments, where minikube is not used, We can deploy the nginx ingress controller using this:
+```bash
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.3/deploy/static/provider/baremetal/deploy.yaml
+```
+
+Once ingress controller is there, We can create an `Ingress Resource` to route to the services:
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: color-deployments-ingress
+
+spec:
+    ingressClassName: nginx
+    rules:
+        - http:
+            paths:
+                - path: /red
+                  pathType: Prefix
+                  backend:
+                    service:
+                        name: red-deployment
+                        port:
+                            number: 80
+
+                - path: /blue
+                  pathType: Prefix
+                  backend:
+                    service:
+                        name: blue-deployment
+                        port:
+                            number: 80
+          host: kube.local
+```
+
+Now both the deployments are accessible using a single host based on their route.
 
