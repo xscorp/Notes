@@ -234,3 +234,14 @@ spec:
 
 Now both the deployments are accessible using a single host based on their route.
 
+Imperative command to create an ingress resource:
+```bash
+$ kubectl create ingress <ingress-name> --rule="<path>:<service-name>:<service-port>" --rule="<path>:<service-name>:<service-port>" --annotation="<key>=<value>"
+```
+
+Example:
+
+```bash
+$ kubectl create ingress app-ingress --rule="/wear=wear-service:8080" --rule="/watch=video-service:8080" --annotation="nginx.ingress.kubernetes.io/rewrite-target=/"
+```
+
