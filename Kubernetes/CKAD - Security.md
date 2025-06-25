@@ -98,4 +98,99 @@ To specify a custom kube config instead of using the default one:
 kubectl config --kubeconfig <path-to-config-file> use-context <context-name>
 ```
 
-To avoid passing a custom config file repeatedly, We can set the `$KUBECONFIG` env variable instead of overwriting the default config
+To avoid passing a custom config file repeatedly, We can set the `$KUBECONFIG` env variable instead of overwriting the default config.
+
+<br/><br/>
+
+### RBAC in Kubernetes
+
+Instead of giving individual users access to resources, A role can be created. A role will have certain permissions that can later be bound to a user.
+
+A role in kubernetes specifies what all API Groups (core, apps, etc), resources (pods, deployments, services, etc) and verbs (get, list, watch, create, delete, etc) a user/role can access. A role can be created using the following role definition specification:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developer
+  namespace: default
+
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["create", "list", "delete"]
+```
+
+Once a `Role` is created, That role can be bound to a user/group using `RoleBinding` object. A `RoleBinding` object creates binding between a role and a user/group. A sample role binding can be created using the following specification:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+
+metadata:
+  name: dev-user-binding
+  namespace: default
+
+subjects:
+  - name: dev-user
+    kind: User
+
+roleRef:
+  name: developer
+  kind: Role
+```
+
+To verify if you can access a user can execute a certain command on a certain namespace, the `auth can-i` command can be used:
+
+```bash
+k auth can-i get pods/dark-blue-app -n blue --as dev-user
+```
+
+
+<br/><br/>
+
+### Cluster scoped RBAC in Kubernetes
+
+The classic `Role` and `RoleBinding` objects are **namespace scoped**, which means that the bounded user can only perform those `verbs` on `resources` from `apiGroups` on a specified namespace (`default` if not specified). But not every object in kubernetes is namespace scoped. For an example, nodes, storage classes, etc are tied to a cluster and not specific to a namespace. To implement RBAC in such cluster scoped or non-namespace scoped objects, We use `ClusterRole` and `ClusterRoleBinding`. The specification remains same as the classic `Role` and `RoleBinding` objects, just the `resources` are changed.
+
+<br/>
+
+A `ClusterRole` can be defined using:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: storage-admin
+rules:
+- apiGroups: [""]
+  resources: ["storageclasses", "persistentvolumes"]
+  verbs: ["get", "watch", "list", "create", "update", "delete"]
+```
+
+<br/>
+
+A `ClusterRoleBinding` object can be defined using:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: michelle-storage-admin
+subjects:
+- kind: User
+  name: michelle
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: storage-admin
+  apiGroup: rbac.authorization.k8s.io
+```
+
+<br/>
+
+To create a cluster role and cluster role binding using command line, following command can be used:
+
+```bash
+kubectl create clusterrole my-role --verb=get,list,create --resource=nodes,storageclasses
+```
