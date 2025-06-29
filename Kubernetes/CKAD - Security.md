@@ -194,3 +194,28 @@ To create a cluster role and cluster role binding using command line, following 
 ```bash
 kubectl create clusterrole my-role --verb=get,list,create --resource=nodes,storageclasses
 ```
+
+
+<br/><br/>
+
+### Admission Controllers
+
+Any command on any object/resource is executed after the authentication and authorization is done
+
+```
+kubectl command -> authentication (using client certificate) -> authorization (RBAC, etc) -> Kube API Server
+```
+
+The RBAC authorization doesn't provide fine grained control over resources. You can only specify "get", "list" etc over resources. But what if we want to perform additional checks - like create a namespace if it doesn't exist already. What if we want each pod creation request to have certain labels? Thats where Admission Controllers come into play, post authorization. Now the chain becomes:
+
+```
+kubectl command -> authentication (using client certificate) -> authorization (RBAC, etc) -> Admission Controllers -> Kube API Server
+```
+
+Admission Controllers allows fine grained control via plugins. For an example, Automatic namespace creation is enabled via `NamespaceAutoProvision` plugin.
+
+Plugins can be enabled/disabled in a Kube API server via `--enable-admission-plugins` and `--disable-admission-plugins` flag as arguments to Kube API server.
+
+These flags can be added via modifying the start command of kube api server in `/etc/kubernetes/manifests/kube-apiserver.yaml `.
+
+If a user intends to create a pod in `test` namespace which doesn't exist, We can enable the `NamespaceAutoProvision` admission controller plugin like `--enable-admission-plugins=NamespaceAutoProvision`
