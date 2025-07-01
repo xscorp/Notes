@@ -219,3 +219,28 @@ Plugins can be enabled/disabled in a Kube API server via `--enable-admission-plu
 These flags can be added via modifying the start command of kube api server in `/etc/kubernetes/manifests/kube-apiserver.yaml `.
 
 If a user intends to create a pod in `test` namespace which doesn't exist, We can enable the `NamespaceAutoProvision` admission controller plugin like `--enable-admission-plugins=NamespaceAutoProvision`
+
+A point worth noting is that admission controllers can only control create, modify and delete requests on a resource. It can't block get, list or watch requests as they bypass the admission controller.
+
+
+<br/><br/>
+
+### Enabling deprecated/older API versions
+
+Kubernetes has alpha, beta, and stable (v1) versions for resources. Alpha ones are experimental, and can be removed without notice. Once converted to beta, support for atleast 3 releases must be provided. Ultimately, stables once are moved to v1.
+
+To enable a deprecated API group version that is disabled by default, We can specify the `--runtime-config` flag in the kubernetes API service manifest file:
+
+Example:
+```
+--runtime-config=rbac.authorization.k8s.io/v1alpha1
+```
+
+Similarly, to convert versions of existing resources, We can use the `kubectl convert` command, which is offered by `kubectl-convert` plugin installed explicitely.
+
+For example, to change the group version in a file named `ingress-old.yaml` to `networking.k8s.io/v1`, We can execute:
+
+```bash
+kubectl-convert -f ./ingress-old.yaml --output-version "networking.k8s.io/v1"
+```
+
