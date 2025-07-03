@@ -244,3 +244,75 @@ For example, to change the group version in a file named `ingress-old.yaml` to `
 kubectl-convert -f ./ingress-old.yaml --output-version "networking.k8s.io/v1"
 ```
 
+
+<br/><br/>
+
+### Custom Resource Definition (CRD) and Custom Controller
+
+Imagine if we could create our own resource, say named "Person". Each person can have age, height, weight, strength and name. Then we could run "kubectl get persons" to list out persons and even have a short name for it - "kubectl get ps".
+
+Kubernetes allows us to create Custom Resource Definitions, and custom controllers to achieve the same.
+
+A *Custom Resource Definition* allows us to define what type of resource we want to create. On the other hand *Custom Controller* is a piece of code which allows us to specify what will happen if an instance of that custom resource is created.
+
+A CRD can be created using the following specification:
+```yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: persons.api.goodpeople.com      # name must be (spec.names.plural) . (spec.group)
+spec:
+  group: api.goodpeople.com
+  scope: Namespaced
+  names:
+    plural: persons
+    singular: person
+    shortNames: ["ps"]
+    kind: Person
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              name:
+                type: string
+              age:
+                type: integer
+              height:
+                type: integer
+              weight:
+                type: integer
+              strength:
+                type: integer
+```
+
+Once created, We can create an instance of the resource using the following specification:
+```yaml
+apiVersion: api.goodpeople.com/v1
+kind: Person
+metadata:
+    name: shashank
+
+spec:
+    name: Shashank
+    age: 24
+    height: 170
+    weight: 1
+    strength: 80
+```
+
+Once this resource is created, Then we can view all the persons using the following commands:
+```bash
+kubectl get persons
+```
+```bash
+kubectl get ps
+```
+
+To specify using preferred programming language, what will happen when a Person resource is created, We create a Custom Controller.
