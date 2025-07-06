@@ -110,4 +110,102 @@ helm install mywebapp .
 
 ### Creating a helm chart
 
+Consider the following deployment file which is used for creating pods displaying blue color in the background:
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: blue-deployment
 
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: blue
+    template:
+        metadata:
+            labels:
+                app: blue
+
+        spec:
+            containers:
+                - name: blue-pod
+                  image: hashicorp/http-echo
+                  args: 
+                    - "-text=<html><body style='background-color:blue'></body></html>"
+                  ports:
+                    - containerPort: 5678 
+```
+
+Now lets say we want to make the following changes:
+* Automatically add the necessary labels on the pods via `.tpl` file.
+* Add variable for replica count in `values.yaml`
+* Add variable for color so that we can create background of arbitrary color, using `values.yaml`.
+
+This is how the templated version of the above deployment file would look like:
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{.Values.color}}-deployment
+
+spec:
+    replicas: {{.Values.replicaCount}}
+    selector:
+        matchLabels:
+            {{ include "color.label" . }}
+    template:
+        metadata:
+            labels:
+                {{ include "color.label" . }}
+
+        spec:
+            containers:
+                - name: {{.Values.color}}-pod
+                  image: hashicorp/http-echo
+                  args: 
+                    - "-text=<html><body style='background-color:{{.Values.color}}'></body></html>"
+                  ports:
+                    - containerPort: 5678 
+```
+
+To make this work, we define the following files:
+
+`values.yaml`
+```yaml
+replicaCount: 3
+color: blue
+```
+
+`_labels.tpl`
+```yaml
+{{- define "color.label" -}}
+app: my-blue-pod
+{{- end}}
+```
+
+Lets also create a `Chart.yaml` file to give a name to this chart:
+```yaml
+apiVersion: v2
+name: color
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
+```
+
+Now the entire directory structure looks like this:
+```bash
+├── Chart.yaml
+├── templates
+│   ├── _labels.tpl
+│   └── deployment-blue.yaml
+└── values.yaml
+```
+
+To install this package, we can run:
+```bash
+helm install <release-name> .
+```
+
+With templated YAML file, values.yaml and template partials in place, the installation automatically creates a deployment with 3 replicas, color set to blue and necessary labels.
